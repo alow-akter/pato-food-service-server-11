@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const port = 5001
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { ObjectID, ObjectId } = require('bson');
 
 
 //middleware
@@ -24,6 +25,18 @@ async function run() {
             const cursor = foodCollection.find(query)
             const foods = await cursor.toArray()
             res.send(foods)
+        })
+        app.get('/threeCurd', async (req, res) => {
+            const query = {}
+            const cursor = foodCollection.find(query)
+            const threeData = await cursor.limit(3).toArray()
+            res.send(threeData)
+        })
+        app.get('/detailsCurd/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const curd = await foodCollection.findOne(query)
+            res.send(curd)
         })
     }
 
