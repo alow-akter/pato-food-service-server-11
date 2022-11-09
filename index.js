@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const port = 5001
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const { ObjectID, ObjectId } = require('bson');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+
 
 
 //middleware
@@ -13,7 +13,6 @@ app.use(express.json())
 
 
 const uri = `mongodb+srv://pato-food-service:bgPDI0C54Suc14ly@cluster0.sduwbrc.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri)
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
@@ -32,11 +31,11 @@ async function run() {
             const threeData = await cursor.limit(3).toArray()
             res.send(threeData)
         })
-        app.get('/detailsCurd/:id', async (req, res) => {
+        app.get('/food/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
-            const curd = await foodCollection.findOne(query)
-            res.send(curd)
+            const curds = await foodCollection.findOne(query)
+            res.send(curds)
         })
     }
 
