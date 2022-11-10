@@ -19,12 +19,20 @@ async function run() {
     try {
         const foodCollection = client.db('FoodDatabase').collection('FoodService')
 
+        const reviewCollection = client.db('FoodDatabase').collection('reviews')
+
         app.get('/food', async (req, res) => {
             const query = {}
             const cursor = foodCollection.find(query)
             const foods = await cursor.toArray()
             res.send(foods)
         })
+        app.post('/foodService', async (req, res) => {
+            const foods = req.body;
+            const result = await foodCollection.insertOne(foods)
+            res.send(result)
+        })
+
         app.get('/threeCurd', async (req, res) => {
             const query = {}
             const cursor = foodCollection.find(query)
@@ -36,6 +44,22 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const curds = await foodCollection.findOne(query)
             res.send(curds)
+        })
+
+        //review api
+        app.get('/reviews', async (req, res) => {
+
+            const query = {}
+            const cursor = reviewCollection.find(query)
+            const review = await cursor.toArray()
+            res.send(review)
+        })
+
+
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review)
+            res.send(result)
         })
     }
 
