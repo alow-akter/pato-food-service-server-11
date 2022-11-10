@@ -33,6 +33,14 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/foodService', async (req, res) => {
+
+            const query = {}
+            const cursor = foodCollection.find(query)
+            const foods = await cursor.toArray()
+            res.send(foods)
+        })
+
         app.get('/threeCurd', async (req, res) => {
             const query = {}
             const cursor = foodCollection.find(query)
@@ -47,14 +55,18 @@ async function run() {
         })
 
         //review api
-        app.get('/reviews', async (req, res) => {
+        app.get(`/reviewsById`, async (req, res) => {
+            let query = {};
+            if (req.query.food) {
+                query = {
+                    food: req.query.food,
+                };
+            }
+            const searchService = await reviewCollection.find(query).toArray();
+            //const result = await searchService.toArray();
 
-            const query = {}
-            const cursor = reviewCollection.find(query)
-            const review = await cursor.toArray()
-            res.send(review)
-        })
-
+            res.send(searchService);
+        });
 
         app.post('/reviews', async (req, res) => {
             const review = req.body;
