@@ -64,7 +64,6 @@ async function run() {
                 };
             }
             const searchService = await reviewCollection.find(query).toArray();
-            //const result = await searchService.toArray();
 
             res.send(searchService);
         });
@@ -73,6 +72,18 @@ async function run() {
             const review = req.body;
             const result = await reviewCollection.insertOne(review)
             res.send(result)
+        })
+        app.get('/reviewsByEmail', async (req, res) => {
+            let query = {}
+            if (req.query.email) {
+                query = {
+                    email: req.query.email
+                }
+            }
+            const cursor = reviewCollection.find(query)
+            const myReview = await cursor.toArray()
+            console.log(myReview)
+            res.send(myReview)
         })
     }
 
